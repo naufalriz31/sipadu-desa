@@ -36,9 +36,10 @@ export async function citizenLogin(req, res) {
     }
 
     // Sign JWT token for the citizen
+    const secret = process.env.JWT_SECRET || "sipadu_desa_default_jwt_secret_key";
     const token = jwt.sign(
       { name: userData.name, email: userData.email, picture: userData.picture, role: "citizen" },
-      process.env.JWT_SECRET,
+      secret,
       { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
     );
 
@@ -49,6 +50,6 @@ export async function citizenLogin(req, res) {
     });
   } catch (err) {
     console.error("Citizen Login Error:", err);
-    res.status(500).json({ message: "Terjadi kesalahan pada server" });
+    res.status(500).json({ message: err.message || "Terjadi kesalahan pada server" });
   }
 }
