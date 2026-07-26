@@ -17,9 +17,11 @@ app.use(express.urlencoded({ extended: true }));
 const uploadsPath = process.env.VERCEL ? "/tmp/uploads" : path.join(__dirname, "..", "uploads");
 app.use("/uploads", express.static(uploadsPath));
 
-// Routes
-app.use("/api", publicRoutes);
+// Routes (support both /api prefix and Vercel serverless function rewrites)
 app.use("/api/admin", adminRoutes);
+app.use("/api", publicRoutes);
+app.use("/admin", adminRoutes);
+app.use("/", publicRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "SIPADU Desa API berjalan dengan baik" });

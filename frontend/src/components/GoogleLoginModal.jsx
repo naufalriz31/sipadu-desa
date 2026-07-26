@@ -17,7 +17,7 @@ export default function GoogleLoginModal({ isOpen, onClose, onLoginSuccess }) {
       await onLoginSuccess({ credential: response.credential });
       onClose();
     } catch (err) {
-      setError(err.response?.data?.message || "Gagal memverifikasi login Google dengan backend");
+      setError(err.response?.data?.message || err.message || "Gagal memverifikasi login Google dengan backend");
     } finally {
       setLoading(false);
     }
