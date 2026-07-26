@@ -5,6 +5,7 @@ import {
   getComplaintDetail,
   updateStatus,
   getDashboardStats,
+  deleteComplaint,
 } from "../controllers/complaintController.js";
 import {
   listCategories,
@@ -23,6 +24,8 @@ router.get("/dashboard", getDashboardStats);
 router.get("/complaints", listComplaints);
 router.get("/complaints/:id", getComplaintDetail);
 router.patch("/complaints/:id/status", updateStatus);
+router.delete("/complaints/:id", deleteComplaint);
+
 
 router.get("/categories", listCategories);
 router.post("/categories", createCategory);

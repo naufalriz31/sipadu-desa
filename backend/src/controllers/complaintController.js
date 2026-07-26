@@ -226,3 +226,22 @@ export async function getDashboardStats(req, res) {
     res.status(500).json({ message: "Terjadi kesalahan pada server" });
   }
 }
+
+// DELETE /api/admin/complaints/:id -> hapus pengaduan (admin)
+export async function deleteComplaint(req, res) {
+  try {
+    const { id } = req.params;
+
+    const [result] = await pool.query("DELETE FROM complaints WHERE id = ?", [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Pengaduan tidak ditemukan" });
+    }
+
+    res.json({ message: "Pengaduan berhasil dihapus" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Gagal menghapus pengaduan" });
+  }
+}
+

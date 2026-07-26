@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import Sidebar from "../../components/Sidebar";
+import AdminLayout from "../../components/AdminLayout";
 import { getDashboardStats } from "../../api/complaintApi";
 import { useAuth } from "../../context/AuthContext";
 
@@ -34,10 +34,9 @@ export default function Dashboard() {
 
   if (!stats) {
     return (
-      <div className="flex">
-        <Sidebar />
-        <main className="flex-1 p-6">Memuat data...</main>
-      </div>
+      <AdminLayout title="Dashboard">
+        <div className="py-12 text-center text-slate-500">Memuat data dashboard...</div>
+      </AdminLayout>
     );
   }
 
@@ -72,45 +71,45 @@ export default function Dashboard() {
     ],
   };
 
-  return (
-    <div className="flex">
-      <Sidebar />
-      <main className="flex-1 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-xl font-bold text-slate-800">Dashboard</h1>
-            <p className="text-xs text-slate-500">Selamat datang, {user?.name || "Admin"}</p>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 rounded-lg text-sm font-semibold transition"
-          >
-            Logout
-          </button>
-        </div>
+  const logoutAction = (
+    <button
+      onClick={handleLogout}
+      className="px-3.5 py-1.5 bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 rounded-lg text-xs font-semibold transition"
+    >
+      Logout
+    </button>
+  );
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+  return (
+    <AdminLayout title={`Dashboard (${user?.name || "Admin"})`} action={logoutAction}>
+      <div className="space-y-6">
+        {/* Summary Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {summaryCards.map((card) => (
-            <div key={card.label} className="bg-white border border-slate-200 rounded-xl p-4">
+            <div key={card.label} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
               <div className={`w-8 h-8 rounded-lg ${card.color} mb-3`} />
               <p className="text-2xl font-bold text-slate-800">{card.value}</p>
-              <p className="text-sm text-slate-500">{card.label}</p>
+              <p className="text-xs text-slate-500">{card.label}</p>
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white border border-slate-200 rounded-xl p-5">
-            <p className="font-semibold text-slate-700 mb-4">Pengaduan per Kategori</p>
-            <Bar data={barData} />
+        {/* Charts Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <p className="font-semibold text-slate-700 mb-4 text-sm">Pengaduan per Kategori</p>
+            <div className="h-64">
+              <Bar data={barData} options={{ responsive: true, maintainAspectRatio: false }} />
+            </div>
           </div>
-          <div className="bg-white border border-slate-200 rounded-xl p-5">
-            <p className="font-semibold text-slate-700 mb-4">Pengaduan per Status</p>
-            <Pie data={pieData} />
+          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <p className="font-semibold text-slate-700 mb-4 text-sm">Pengaduan per Status</p>
+            <div className="h-64 flex justify-center">
+              <Pie data={pieData} options={{ responsive: true, maintainAspectRatio: false }} />
+            </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </AdminLayout>
   );
 }
-

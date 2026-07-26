@@ -24,6 +24,9 @@ export const getComplaintDetail = (id) => axiosClient.get(`/admin/complaints/${i
 export const updateComplaintStatus = (id, payload) =>
   axiosClient.patch(`/admin/complaints/${id}/status`, payload);
 
+export const deleteComplaint = (id) => axiosClient.delete(`/admin/complaints/${id}`);
+
+
 export const getAdminCategories = () => axiosClient.get("/admin/categories");
 export const createCategory = (payload) => axiosClient.post("/admin/categories", payload);
 export const updateCategory = (id, payload) => axiosClient.put(`/admin/categories/${id}`, payload);
