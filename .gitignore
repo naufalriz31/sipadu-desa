@@ -1,0 +1,27 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env
+
+# Dependencies
+node_modules/
+
+# Production build
+dist/
+build/
+
+# Uploads / temp files
+backend/uploads/complaint-photos/*
+!backend/uploads/complaint-photos/.gitkeep
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
