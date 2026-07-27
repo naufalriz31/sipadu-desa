@@ -1,5 +1,10 @@
 import pool from "../config/db.js";
 import { generateTicketNumber } from "../utils/generateTicket.js";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // ---------- PUBLIK ----------
 
@@ -249,6 +254,55 @@ export async function deleteComplaint(req, res) {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Gagal menghapus pengaduan" });
+  }
+}
+
+// GET /api/complaints/:id/photo -> menyajikan foto pengaduan (Base64 / local) secara langsung sebagai HTTP Image Response
+export async function getComplaintPhoto(req, res) {
+  try {
+    const { id } = req.params;
+    const [rows] = await pool.query("SELECT photo_path FROM complaints WHERE id = ? OR ticket_number = ?", [id, id]);
+
+    if (rows.length === 0 || !rows[0].photo_path) {
+      return res.status(404).send("Foto tidak ditemukan");
+    }
+
+    const photoPath = rows[0].photo_path;
+
+    // Jika tersimpan sebagai Data URL Base64
+    if (photoPath.startsWith("data:")) {
+      const matches = photoPath.match(/^data:(image\/\w+);base64,(.+)$/);
+      if (matches) {
+        const mimeType = matches[1];
+        const base64Data = matches[2];
+        const imgBuffer = Buffer.from(base64Data, "base64");
+
+        res.setHeader("Content-Type", mimeType);
+        res.setHeader("Cache-Control", "public, max-age=86400");
+        return res.send(imgBuffer);
+      }
+    }
+
+    // Jika tersimpan sebagai URL eksternal
+    if (photoPath.startsWith("http://") || photoPath.startsWith("https://")) {
+      return res.redirect(photoPath);
+    }
+
+    // Fallback: file lokal
+    const localPath1 = path.join(__dirname, "../../uploads", photoPath);
+    const localPath2 = path.join(__dirname, "../../uploads/complaint-photos", photoPath);
+
+    if (fs.existsSync(localPath1)) {
+      return res.sendFile(localPath1);
+    }
+    if (fs.existsSync(localPath2)) {
+      return res.sendFile(localPath2);
+    }
+
+    res.status(404).send("File foto tidak ditemukan");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Terjadi kesalahan pada server");
   }
 }
 

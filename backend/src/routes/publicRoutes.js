@@ -5,6 +5,7 @@ import {
   checkStatus,
   getCategories,
   getMyComplaints,
+  getComplaintPhoto,
 } from "../controllers/complaintController.js";
 
 import { login } from "../controllers/authController.js";
@@ -17,6 +18,7 @@ const router = Router();
 router.post("/complaints", verifyCitizen, upload.single("photo"), createComplaint);
 router.get("/complaints/my-complaints", verifyCitizen, getMyComplaints);
 router.get("/complaints/status/:ticket", checkStatus);
+router.get("/complaints/:id/photo", getComplaintPhoto);
 router.get("/categories", getCategories);
 
 

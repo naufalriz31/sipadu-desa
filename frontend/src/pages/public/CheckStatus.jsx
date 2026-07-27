@@ -153,16 +153,16 @@ export default function CheckStatus() {
                   <span className="font-semibold block text-xs text-slate-700 mb-1">Foto Lampiran:</span>
                   <img
                     src={
-                      result.photo_path.startsWith("data:") || result.photo_path.startsWith("http")
+                      result.photo_path.startsWith("data:")
                         ? result.photo_path
-                        : `${apiBaseUrl}/uploads/${result.photo_path}`
+                        : `${apiBaseUrl}/api/complaints/${result.ticket_number}/photo`
                     }
                     alt="Foto Lampiran"
                     className="max-h-48 rounded-lg border border-slate-200 object-contain bg-slate-900/5"
                     onError={(e) => {
-                      if (!e.target.dataset.triedFallback && !result.photo_path.startsWith("data:")) {
+                      if (!e.target.dataset.triedFallback) {
                         e.target.dataset.triedFallback = "true";
-                        e.target.src = `${apiBaseUrl}/uploads/complaint-photos/${result.photo_path}`;
+                        e.target.src = `${apiBaseUrl}/api/complaints/${result.ticket_number}/photo`;
                       }
                     }}
                   />
@@ -258,16 +258,16 @@ export default function CheckStatus() {
                     <div className="pt-2">
                       <img
                         src={
-                          item.photo_path.startsWith("data:") || item.photo_path.startsWith("http")
+                          item.photo_path.startsWith("data:")
                             ? item.photo_path
-                            : `${apiBaseUrl}/uploads/${item.photo_path}`
+                            : `${apiBaseUrl}/api/complaints/${item.id || item.ticket_number}/photo`
                         }
                         alt="Foto Lampiran"
                         className="max-h-36 rounded-lg border border-slate-200 object-contain bg-slate-900/5"
                         onError={(e) => {
-                          if (!e.target.dataset.triedFallback && !item.photo_path.startsWith("data:")) {
+                          if (!e.target.dataset.triedFallback) {
                             e.target.dataset.triedFallback = "true";
-                            e.target.src = `${apiBaseUrl}/uploads/complaint-photos/${item.photo_path}`;
+                            e.target.src = `${apiBaseUrl}/api/complaints/${item.ticket_number}/photo`;
                           }
                         }}
                       />
