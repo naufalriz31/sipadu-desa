@@ -31,3 +31,7 @@ export const getAdminCategories = () => axiosClient.get("/admin/categories");
 export const createCategory = (payload) => axiosClient.post("/admin/categories", payload);
 export const updateCategory = (id, payload) => axiosClient.put(`/admin/categories/${id}`, payload);
 export const deleteCategory = (id) => axiosClient.delete(`/admin/categories/${id}`);
+
+// ---- Admin Account ----
+export const getAdminAccount = () => axiosClient.get("/admin/account");
+export const updateAdminAccount = (payload) => axiosClient.put("/admin/account", payload);

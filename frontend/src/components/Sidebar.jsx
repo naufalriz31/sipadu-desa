@@ -1,14 +1,21 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const menuItems = [
   { to: "/admin/dashboard", label: "Dashboard", icon: "📊" },
   { to: "/admin/pengaduan", label: "Pengaduan", icon: "📝" },
   { to: "/admin/kategori", label: "Kategori", icon: "📂" },
+  { to: "/admin/pengaturan", label: "Pengaturan", icon: "⚙️" },
 ];
 
 export default function Sidebar({ isMobileOpen, onCloseMobile, isCollapsed, toggleCollapse }) {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/admin/login");
+  };
 
   return (
     <>
@@ -76,6 +83,20 @@ export default function Sidebar({ isMobileOpen, onCloseMobile, isCollapsed, togg
             </NavLink>
           ))}
         </nav>
+
+        {/* Logout Button */}
+        <div className="p-3 border-t border-slate-200">
+          <button
+            onClick={handleLogout}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition w-full ${
+              isCollapsed ? "justify-center" : ""
+            }`}
+            title={isCollapsed ? "Keluar" : undefined}
+          >
+            <span className="text-lg">🚪</span>
+            {!isCollapsed && <span>Keluar</span>}
+          </button>
+        </div>
       </aside>
     </>
   );

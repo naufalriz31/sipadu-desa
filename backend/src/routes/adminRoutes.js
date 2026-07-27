@@ -13,6 +13,10 @@ import {
   updateCategory,
   deleteCategory,
 } from "../controllers/categoryController.js";
+import {
+  getAdminAccount,
+  updateAdminAccount,
+} from "../controllers/authController.js";
 
 const router = Router();
 
@@ -26,10 +30,13 @@ router.get("/complaints/:id", getComplaintDetail);
 router.patch("/complaints/:id/status", updateStatus);
 router.delete("/complaints/:id", deleteComplaint);
 
-
 router.get("/categories", listCategories);
 router.post("/categories", createCategory);
 router.put("/categories/:id", updateCategory);
 router.delete("/categories/:id", deleteCategory);
+
+// Pengaturan Akun Admin
+router.get("/account", getAdminAccount);
+router.put("/account", updateAdminAccount);
 
 export default router;

@@ -10,6 +10,7 @@ import Dashboard from "../pages/admin/Dashboard";
 import ComplaintList from "../pages/admin/ComplaintList";
 import ComplaintDetail from "../pages/admin/ComplaintDetail";
 import CategoryManage from "../pages/admin/CategoryManage";
+import AccountSettings from "../pages/admin/AccountSettings";
 
 import ProtectedRoute from "../components/ProtectedRoute";
 
@@ -53,6 +54,14 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute>
             <CategoryManage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/pengaturan"
+        element={
+          <ProtectedRoute>
+            <AccountSettings />
           </ProtectedRoute>
         }
       />
