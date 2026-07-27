@@ -8,8 +8,8 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use((config) => {
   const isAdminRequest = config.url.includes("/admin");
   const token = isAdminRequest
-    ? localStorage.getItem("sipadu_token")
-    : (localStorage.getItem("sipadu_citizen_token") || localStorage.getItem("sipadu_token"));
+    ? (sessionStorage.getItem("sipadu_token") || localStorage.getItem("sipadu_token"))
+    : (localStorage.getItem("sipadu_citizen_token") || sessionStorage.getItem("sipadu_token") || localStorage.getItem("sipadu_token"));
   
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -24,13 +24,14 @@ axiosClient.interceptors.response.use(
     if (err.response?.status === 401) {
       const isAdminRequest = err.config?.url?.includes("/admin");
       if (isAdminRequest) {
+        sessionStorage.removeItem("sipadu_token");
+        sessionStorage.removeItem("sipadu_user");
         localStorage.removeItem("sipadu_token");
         localStorage.removeItem("sipadu_user");
         window.location.href = "/admin/login";
       } else {
         localStorage.removeItem("sipadu_citizen_token");
         localStorage.removeItem("sipadu_citizen");
-        // Tergantung komponen page, state diclear
       }
     }
     return Promise.reject(err);

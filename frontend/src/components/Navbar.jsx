@@ -106,25 +106,16 @@ export default function Navbar() {
             </button>
           )}
 
-          {/* Admin Link Section - Hidden when citizen is logged in */}
-          {(!citizen || adminUser) && (
+          {/* Admin Link Section - Only visible when citizen is NOT logged in */}
+          {!citizen && (
             <>
               <div className="h-5 w-px bg-slate-200" />
-              {adminUser ? (
-                <Link
-                  to="/admin/dashboard"
-                  className="border border-primary-600 text-primary-700 px-3 py-1.5 rounded-lg hover:bg-primary-50 transition text-xs font-semibold"
-                >
-                  Dashboard Admin
-                </Link>
-              ) : (
-                <Link
-                  to="/admin/login"
-                  className="text-slate-500 hover:text-primary-600 text-xs font-semibold transition"
-                >
-                  Login Admin
-                </Link>
-              )}
+              <Link
+                to="/admin/login"
+                className="text-slate-500 hover:text-primary-600 text-xs font-semibold transition"
+              >
+                Login Admin
+              </Link>
             </>
           )}
         </nav>
@@ -197,24 +188,15 @@ export default function Navbar() {
             </button>
           )}
 
-          {(!citizen || adminUser) && (
+          {!citizen && (
             <>
               <hr className="border-slate-100" />
-              {adminUser ? (
-                <Link
-                  to="/admin/dashboard"
-                  className="block text-center border border-primary-600 text-primary-700 font-semibold py-2 px-3 rounded-lg text-xs hover:bg-primary-50"
-                >
-                  Dashboard Admin
-                </Link>
-              ) : (
-                <Link
-                  to="/admin/login"
-                  className="block text-center text-slate-500 font-medium py-2 px-3 rounded-lg text-xs hover:text-slate-700"
-                >
-                  Login Admin
-                </Link>
-              )}
+              <Link
+                to="/admin/login"
+                className="block text-center text-slate-500 font-medium py-2 px-3 rounded-lg text-xs hover:text-slate-700"
+              >
+                Login Admin
+              </Link>
             </>
           )}
         </div>
