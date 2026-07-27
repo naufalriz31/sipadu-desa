@@ -20,7 +20,14 @@ export async function createComplaint(req, res) {
     }
 
     const ticketNumber = await generateTicketNumber();
-    const photoPath = req.file ? req.file.filename : null;
+    let photoPath = null;
+    if (req.file) {
+      if (req.file.buffer) {
+        photoPath = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+      } else if (req.file.filename) {
+        photoPath = req.file.filename;
+      }
+    }
 
     const [result] = await pool.query(
       `INSERT INTO complaints

@@ -61,6 +61,20 @@ export default function ComplaintForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        setError("Ukuran foto melebihi batas maksimal 5 MB. Silakan pilih foto yang lebih kecil.");
+        e.target.value = "";
+        setPhoto(null);
+        return;
+      }
+      setError("");
+      setPhoto(file);
+    }
+  };
+
   const handleLoginSuccess = async (googleUser) => {
     try {
       const res = await loginCitizen(googleUser);
@@ -229,13 +243,33 @@ export default function ComplaintForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Upload Foto (opsional)</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-sm font-medium text-slate-700">Upload Foto Lampiran (opsional)</label>
+                <span className="text-xs font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">Maks 5 MB</span>
+              </div>
               <input
                 type="file"
-                accept="image/*"
-                onChange={(e) => setPhoto(e.target.files[0])}
-                className="w-full text-sm"
+                accept="image/jpeg,image/jpg,image/png,image/webp"
+                onChange={handleFileChange}
+                className="w-full text-sm text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 cursor-pointer"
               />
+              <p className="text-[11px] text-slate-400 mt-1">
+                Format: <strong>JPG, PNG, WEBP</strong> (Maksimal <strong>5 MB</strong>)
+              </p>
+              {photo && (
+                <div className="mt-2.5 flex items-center justify-between bg-primary-50/50 border border-primary-150 p-2.5 rounded-xl text-xs">
+                  <span className="truncate max-w-[240px] text-slate-700 font-medium flex items-center gap-1.5">
+                    📷 {photo.name} <span className="text-primary-700 font-bold">({(photo.size / (1024 * 1024)).toFixed(2)} MB)</span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setPhoto(null)}
+                    className="text-red-500 hover:text-red-700 font-semibold text-xs ml-2 bg-white px-2 py-1 rounded-lg border border-red-200 shadow-xs"
+                  >
+                    Batal
+                  </button>
+                </div>
+              )}
             </div>
 
             <button

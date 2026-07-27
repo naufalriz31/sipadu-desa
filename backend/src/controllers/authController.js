@@ -10,7 +10,7 @@ export async function login(req, res) {
       return res.status(400).json({ message: "Username dan password wajib diisi" });
     }
 
-    const [rows] = await pool.query("SELECT * FROM users WHERE username = ?", [username]);
+    const [rows] = await pool.query("SELECT * FROM users WHERE username = ? OR email = ?", [username, username]);
 
     if (rows.length === 0) {
       return res.status(401).json({ message: "Username atau password salah" });

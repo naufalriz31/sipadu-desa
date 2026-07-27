@@ -75,9 +75,19 @@ export default function ComplaintDetail() {
             <div>
               <span className="block text-xs font-semibold text-slate-500 mb-1.5">Foto Lampiran:</span>
               <img
-                src={`${API_BASE}/uploads/${complaint.photo_path}`}
+                src={
+                  complaint.photo_path.startsWith("data:") || complaint.photo_path.startsWith("http")
+                    ? complaint.photo_path
+                    : `${API_BASE}/uploads/${complaint.photo_path}`
+                }
                 alt="Foto pengaduan"
-                className="w-full max-h-80 object-cover rounded-xl border border-slate-200"
+                className="w-full max-h-96 object-contain bg-slate-900/5 rounded-xl border border-slate-200"
+                onError={(e) => {
+                  if (!e.target.dataset.triedFallback && !complaint.photo_path.startsWith("data:")) {
+                    e.target.dataset.triedFallback = "true";
+                    e.target.src = `${API_BASE}/uploads/complaint-photos/${complaint.photo_path}`;
+                  }
+                }}
               />
             </div>
           )}

@@ -152,9 +152,19 @@ export default function CheckStatus() {
                 <div>
                   <span className="font-semibold block text-xs text-slate-700 mb-1">Foto Lampiran:</span>
                   <img
-                    src={`${apiBaseUrl}/uploads/${result.photo_path}`}
+                    src={
+                      result.photo_path.startsWith("data:") || result.photo_path.startsWith("http")
+                        ? result.photo_path
+                        : `${apiBaseUrl}/uploads/${result.photo_path}`
+                    }
                     alt="Foto Lampiran"
-                    className="max-h-48 rounded-lg border border-slate-200 object-cover"
+                    className="max-h-48 rounded-lg border border-slate-200 object-contain bg-slate-900/5"
+                    onError={(e) => {
+                      if (!e.target.dataset.triedFallback && !result.photo_path.startsWith("data:")) {
+                        e.target.dataset.triedFallback = "true";
+                        e.target.src = `${apiBaseUrl}/uploads/complaint-photos/${result.photo_path}`;
+                      }
+                    }}
                   />
                 </div>
               )}
@@ -247,9 +257,19 @@ export default function CheckStatus() {
                   {item.photo_path && (
                     <div className="pt-2">
                       <img
-                        src={`${apiBaseUrl}/uploads/${item.photo_path}`}
+                        src={
+                          item.photo_path.startsWith("data:") || item.photo_path.startsWith("http")
+                            ? item.photo_path
+                            : `${apiBaseUrl}/uploads/${item.photo_path}`
+                        }
                         alt="Foto Lampiran"
-                        className="max-h-36 rounded-lg border border-slate-200 object-cover"
+                        className="max-h-36 rounded-lg border border-slate-200 object-contain bg-slate-900/5"
+                        onError={(e) => {
+                          if (!e.target.dataset.triedFallback && !item.photo_path.startsWith("data:")) {
+                            e.target.dataset.triedFallback = "true";
+                            e.target.src = `${apiBaseUrl}/uploads/complaint-photos/${item.photo_path}`;
+                          }
+                        }}
                       />
                     </div>
                   )}

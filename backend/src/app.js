@@ -13,9 +13,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Akses foto pengaduan yang sudah diupload
-const uploadsPath = process.env.VERCEL ? "/tmp/uploads" : path.join(__dirname, "..", "uploads");
+// Akses foto pengaduan yang sudah diupload (untuk file lokal / legacy)
+const uploadsPath = path.join(__dirname, "..", "uploads");
 app.use("/uploads", express.static(uploadsPath));
+app.use("/uploads/complaint-photos", express.static(path.join(uploadsPath, "complaint-photos")));
 
 // Routes (support both /api prefix and Vercel serverless function rewrites)
 app.use("/api/admin", adminRoutes);
